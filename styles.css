@@ -35,6 +35,11 @@ body {
     height: 100%;
     background-color: #333;
     padding-top: 20px;
+    transition: width 0.3s;
+}
+
+.sidebar.hide {
+    width: 50px;
 }
 
 .sidebar ul {
@@ -57,9 +62,28 @@ body {
     background-color: #575757;
 }
 
+.sidebar .sidebar-toggle {
+    background-color: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    width: 100%;
+    text-align: left;
+}
+
+.sidebar .sidebar-toggle:hover {
+    background-color: #575757;
+}
+
 .content {
     margin-left: 200px;
     padding: 20px;
+    transition: margin-left 0.3s;
+}
+
+.sidebar.hide + .content {
+    margin-left: 70px;
 }
 
 .container {
