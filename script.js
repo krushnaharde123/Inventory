@@ -14,17 +14,4 @@ const breakingCapacityData = {
 };
 
 const identificationData = {
-    '5SL1': '5SL1 on bottom',
-    '5SJ': '5SJ on bottom',
-    'Mexico': 'MB on bottom',
-    '5SL6': 'M- on bottom',
-    '5SL4': '* on bottom',
-    'ELSA-2': 'L- on bottom',
-    'ELSA-1': 'E- on bottom',
-    '5SL7': '5SL7 or K on bottom',
-    'MB': 'Blue stamp on bottom',
-    'MB Europe': '*MB on bottom',
-    '5SL7-K': 'K on bottom'
-};
-
-const productFamilySelect = document.getElementById('product-family');
+    '5
