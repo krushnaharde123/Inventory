@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carton Entry</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+    <div class="header">
+        <img src="siemens-logo.png" alt="Siemens Logo" class="logo">
+        <h1>Carton Entry</h1>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="entry.html">MCB Entry</a>
+            <a href="carton-entry.html">Carton Entry</a>
+            <a href="physical-counting.html">Physical Counting</a>
+        </nav>
+    </div>
+    <div class="sidebar">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="entry.html">MCB Entry</a></li>
+            <li><a href="carton-entry.html">Carton Entry</a></li>
+            <li><a href="physical-counting.html">Physical Counting</a></li>
+        </ul>
+    </div>
+    <div class="content">
+        <div class="container">
+            <form id="carton-entry-form">
+                <div class="form-group">
+                    <label for="material-description">Material Description</label>
+                    <input type="text" id="material-description" list="material-list">
+                    <datalist id="material-list"></datalist>
+                </div>
+                <div class="form-group">
+                    <label for="material-number">Material Number</label>
+                    <input type="text" id="material-number" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="location">Location</label>
+                    <input type="text" id="location">
+                </div>
+                <button type="button" id="add-carton-entry">Add Entry</button>
+            </form>
+            <table id="carton-entry-table">
+                <thead>
+                    <tr>
+                        <th>Material Description</th>
+                        <th>Material Number</th>
+                        <th>Location</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <div class="action-buttons">
+                <button type="button" id="preview-carton-file">Preview Carton File</button>
+                <button type="button" id="generate-carton-file" style="display: none;">Generate Carton File</button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
