@@ -9,6 +9,14 @@ body {
     color: #fff;
     padding: 10px;
     text-align: center;
+    position: relative;
+}
+
+.header .logo {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 50px;
 }
 
 .header nav a {
@@ -23,7 +31,7 @@ body {
 
 .sidebar {
     position: fixed;
-    width: 200px;
+    width: 180px;
     height: 100%;
     background-color: #333;
     padding-top: 20px;
@@ -50,7 +58,7 @@ body {
 }
 
 .content {
-    margin-left: 220px;
+    margin-left: 200px;
     padding: 20px;
 }
 
@@ -121,23 +129,28 @@ th, td {
     font-size: 0.8em;
 }
 
-.action-buttons #generate-inventory-file {
+.action-buttons #generate-inventory-file,
+.action-buttons #generate-carton-file {
     background-color: #28a745;
 }
 
-.action-buttons #generate-inventory-file:hover {
+.action-buttons #generate-inventory-file:hover,
+.action-buttons #generate-carton-file:hover {
     background-color: #218838;
 }
 
-.action-buttons #preview-inventory-file {
+.action-buttons #preview-inventory-file,
+.action-buttons #preview-carton-file {
     background-color: #17a2b8;
 }
 
-.action-buttons #preview-inventory-file:hover {
+.action-buttons #preview-inventory-file:hover,
+.action-buttons #preview-carton-file:hover {
     background-color: #138496;
 }
 
-#files-table button {
+#files-table button,
+#carton-files-table button {
     font-size: 0.8em;
     padding: 5px 10px;
     border-radius: 5px;
@@ -145,14 +158,52 @@ th, td {
     color: #fff;
 }
 
-#files-table .download-file {
+#files-table .download-file,
+#carton-files-table .download-file {
     background-color: #007BFF;
 }
 
-#files-table .delete-file {
+#files-table .delete-file,
+#carton-files-table .delete-file {
     background-color: #DC3545;
 }
 
 .bold {
+    font-weight: bold;
+}
+
+.tabs {
+    overflow: hidden;
+    background-color: #f1f1f1;
+    border-bottom: 1px solid #ccc;
+}
+
+.tabs button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    font-size: 17px;
+}
+
+.tabs button:hover {
+    background-color: #ddd;
+}
+
+.tabs button.active {
+    background-color: #ccc;
+}
+
+.tab-content {
+    display: none;
+    padding: 6px 12px;
+    border-top: none;
+}
+
+.highlight {
+    background-color: #ffff99;
     font-weight: bold;
 }
