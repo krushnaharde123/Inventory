@@ -3,23 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inventory Entry</title>
+    <title>MCB Entry</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
     <div class="header">
-        <h1>Inventory Entry</h1>
+        <img src="siemens-logo.png" alt="Siemens Logo" class="logo">
+        <h1>MCB Entry</h1>
         <nav>
             <a href="index.html">Home</a>
-            <a href="entry.html">Entry</a>
+            <a href="entry.html">MCB Entry</a>
+            <a href="carton-entry.html">Carton Entry</a>
             <a href="physical-counting.html">Physical Counting</a>
         </nav>
     </div>
     <div class="sidebar">
         <ul>
             <li><a href="index.html">Home</a></li>
-            <li><a href="entry.html">Entry</a></li>
+            <li><a href="entry.html">MCB Entry</a></li>
+            <li><a href="carton-entry.html">Carton Entry</a></li>
             <li><a href="physical-counting.html">Physical Counting</a></li>
         </ul>
     </div>
@@ -80,6 +83,10 @@
                     <select id="breaking-capacity"></select>
                 </div>
                 <div class="form-group">
+                    <label for="identification">Identification</label>
+                    <input type="text" id="identification" readonly>
+                </div>
+                <div class="form-group">
                     <label for="quantity">Quantity</label>
                     <input type="number" id="quantity" min="1">
                 </div>
@@ -98,6 +105,7 @@
                         <th>Breaking Capacity</th>
                         <th>Quantity</th>
                         <th>Location</th>
+                        <th>Identification</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
