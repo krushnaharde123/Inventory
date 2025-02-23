@@ -92,14 +92,21 @@ document.addEventListener('DOMContentLoaded', function() {
             const csvRows = allEntries.map(entry => `${entry.polarity},${entry.rating},${entry.productFamily},${entry.breakingCapacity},${entry.quantity},${entry.location}`);
             const csvContent = `data:text/csv;charset=utf-8,${csvHeader}\n${csvRows.join('\n')}`;
             const encodedUri = encodeURI(csvContent);
-            const link = document.createElement('a');
-            link.setAttribute('href', encodedUri);
-            link.setAttribute('download', `${fileName}.csv`);
-            document.body.appendChild(link);
-            link.click();
+            const file = {
+                name: `${fileName}.csv`,
+                content: encodedUri
+            };
+            saveFileToLocalStorage(file, 'mcbFiles');
             alert('File saved successfully.');
         }
     });
+
+    function saveFileToLocalStorage(file, type) {
+        const storedFiles = JSON.parse(localStorage.getItem(type)) || [];
+        storedFiles.push(file);
+        localStorage.setItem(type, JSON.stringify(storedFiles));
+        renderFiles();
+    }
 
     // Carton Entry page logic
     const cartonMasterFileInput = document.getElementById('carton-master-file');
@@ -200,11 +207,11 @@ document.addEventListener('DOMContentLoaded', function() {
             const csvRows = allCartonEntries.map(entry => `${entry.description},${entry.materialNumber},${entry.quantity},${entry.location}`);
             const csvContent = `data:text/csv;charset=utf-8,${csvHeader}\n${csvRows.join('\n')}`;
             const encodedUri = encodeURI(csvContent);
-            const link = document.createElement('a');
-            link.setAttribute('href', encodedUri);
-            link.setAttribute('download', `${fileName}.csv`);
-            document.body.appendChild(link);
-            link.click();
+            const file = {
+                name: `${fileName}.csv`,
+                content: encodedUri
+            };
+            saveFileToLocalStorage(file, 'cartonFiles');
             alert('File saved successfully.');
         }
     });
