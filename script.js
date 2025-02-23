@@ -13,9 +13,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const entryTableBody = document.getElementById('entry-table').querySelector('tbody');
     const previewEntryFileButton = document.getElementById('preview-entry-file');
     const saveEntryFileButton = document.getElementById('save-entry-file');
-    const cartonMasterFileInput = document.getElementById('carton-master-file');
-    const materialDescriptionInput = document.getElementById('material-description');
-    const materialNumberInput = document.getElementById('material-number');
     const cartonEntryTableBody = document.getElementById('carton-entry-table').querySelector('tbody');
     const previewCartonFileButton = document.getElementById('preview-carton-file');
     const saveCartonFileButton = document.getElementById('save-carton-file');
@@ -39,7 +36,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     let allEntries = [];
     let allCartonEntries = [];
-    let masterData = [];
 
     // Functions
     function updateBreakingCapacities() {
@@ -109,50 +105,74 @@ document.addEventListener('DOMContentLoaded', function() {
         const csvHeader = 'Polarity,Rating,Product Family,Breaking Capacity,Quantity,Location';
         const csvRows = allEntries.map(entry => `${entry.polarity},${entry.rating},${entry.productFamily},${entry.breakingCapacity},${entry.quantity},${entry.location}`);
         const csvContent = `${csvHeader}\n${csvRows.join('\n')}`;
-        saveFileToLocalStorage(fileName, csvContent, MCB_FILES);
-        alert('File saved successfully.');
+        saveFileToServer(fileName, csvContent, MCB_FILES);
     }
 
-    function saveFileToLocalStorage(fileName, content, type) {
-        const storedFiles = JSON.parse(localStorage.getItem(type)) || [];
-        const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
-        const url = URL.createObjectURL(blob);
-        storedFiles.push({ name: `${fileName}.csv`, content: url });
-        localStorage.setItem(type, JSON.stringify(storedFiles));
-        renderFiles();
+    async function saveFileToServer(fileName, content, type) {
+        const response = await fetch('/save-file', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ fileName, content, type })
+        });
+        if (response.ok) {
+            alert('File saved successfully.');
+            renderFiles();
+        } else {
+            alert('Failed to save file.');
+        }
     }
 
-    function renderFiles() {
-        renderFileList(MCB_FILES, mcbFilesTableBody);
-        renderFileList(CARTON_FILES, cartonFilesTableBody);
+    async function renderFiles() {
+        const [mcbFiles, cartonFiles] = await Promise.all([
+            fetchFiles(MCB_FILES),
+            fetchFiles(CARTON_FILES)
+        ]);
+        renderFileList(mcbFiles, mcbFilesTableBody);
+        renderFileList(cartonFiles, cartonFilesTableBody);
     }
 
-    function renderFileList(type, tableBody) {
-        const storedFiles = JSON.parse(localStorage.getItem(type)) || [];
+    async function fetchFiles(type) {
+        const response = await fetch(`/get-files?type=${type}`);
+        return response.ok ? response.json() : [];
+    }
+
+    function renderFileList(files, tableBody) {
         tableBody.innerHTML = '';
-        storedFiles.forEach((file, index) => {
+        files.forEach((file, index) => {
             const row = document.createElement('tr');
-            row.innerHTML = `<td>${file.name}</td><td><button class="download-file" data-index="${index}" data-type="${type}">Download</button> <button class="delete-file" data-index="${index}" data-type="${type}">Delete</button></td>`;
+            row.innerHTML = `<td>${file.name}</td><td><button class="download-file" data-index="${index}" data-type="${file.type}">Download</button> <button class="delete-file" data-index="${index}" data-type="${file.type}">Delete</button></td>`;
             tableBody.appendChild(row);
         });
     }
 
-    function handleFileActions(event) {
+    async function handleFileActions(event) {
         const index = event.target.getAttribute('data-index');
         const type = event.target.getAttribute('data-type');
-        let storedFiles = JSON.parse(localStorage.getItem(type)) || [];
 
         if (event.target.classList.contains('download-file')) {
-            const file = storedFiles[index];
-            const link = document.createElement('a');
-            link.setAttribute('href', file.content);
-            link.setAttribute('download', file.name);
-            document.body.appendChild(link);
-            link.click();
+            const response = await fetch(`/download-file?type=${type}&index=${index}`);
+            if (response.ok) {
+                const blob = await response.blob();
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.setAttribute('href', url);
+                link.setAttribute('download', response.headers.get('File-Name'));
+                document.body.appendChild(link);
+                link.click();
+            } else {
+                alert('Failed to download file.');
+            }
         } else if (event.target.classList.contains('delete-file')) {
-            storedFiles.splice(index, 1);
-            localStorage.setItem(type, JSON.stringify(storedFiles));
-            renderFiles();
+            const response = await fetch('/delete-file', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ type, index })
+            });
+            if (response.ok) {
+                renderFiles();
+            } else {
+                alert('Failed to delete file.');
+            }
         }
     }
 
