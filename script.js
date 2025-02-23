@@ -91,10 +91,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const csvHeader = "Polarity,Rating,Product Family,Breaking Capacity,Quantity,Location";
             const csvRows = allEntries.map(entry => `${entry.polarity},${entry.rating},${entry.productFamily},${entry.breakingCapacity},${entry.quantity},${entry.location}`);
             const csvContent = `data:text/csv;charset=utf-8,${csvHeader}\n${csvRows.join('\n')}`;
-            const encodedUri = encodeURI(csvContent);
             const file = {
                 name: `${fileName}.csv`,
-                content: encodedUri
+                content: csvContent
             };
             saveFileToLocalStorage(file, 'mcbFiles');
             alert('File saved successfully.');
@@ -206,10 +205,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const csvHeader = "Description,Material Number,Quantity,Location";
             const csvRows = allCartonEntries.map(entry => `${entry.description},${entry.materialNumber},${entry.quantity},${entry.location}`);
             const csvContent = `data:text/csv;charset=utf-8,${csvHeader}\n${csvRows.join('\n')}`;
-            const encodedUri = encodeURI(csvContent);
             const file = {
                 name: `${fileName}.csv`,
-                content: encodedUri
+                content: csvContent
             };
             saveFileToLocalStorage(file, 'cartonFiles');
             alert('File saved successfully.');
@@ -244,8 +242,9 @@ document.addEventListener('DOMContentLoaded', function() {
         let storedFiles = JSON.parse(localStorage.getItem(`${type}Files`)) || [];
         if (event.target.classList.contains('download-file')) {
             const file = storedFiles[index];
+            const encodedUri = encodeURI(file.content);
             const link = document.createElement('a');
-            link.setAttribute('href', file.content);
+            link.setAttribute('href', encodedUri);
             link.setAttribute('download', file.name);
             document.body.appendChild(link);
             link.click();
