@@ -90,10 +90,14 @@ document.addEventListener('DOMContentLoaded', function() {
         if (fileName) {
             const csvHeader = "Polarity,Rating,Product Family,Breaking Capacity,Quantity,Location";
             const csvRows = allEntries.map(entry => `${entry.polarity},${entry.rating},${entry.productFamily},${entry.breakingCapacity},${entry.quantity},${entry.location}`);
-            const csvContent = `data:text/csv;charset=utf-8,${csvHeader}\n${csvRows.join('\n')}`;
+            const csvContent = `${csvHeader}\n${csvRows.join('\n')}`;
+            
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+
             const file = {
                 name: `${fileName}.csv`,
-                content: csvContent
+                content: url
             };
             saveFileToLocalStorage(file, 'mcbFiles');
             alert('File saved successfully.');
@@ -204,10 +208,14 @@ document.addEventListener('DOMContentLoaded', function() {
         if (fileName) {
             const csvHeader = "Description,Material Number,Quantity,Location";
             const csvRows = allCartonEntries.map(entry => `${entry.description},${entry.materialNumber},${entry.quantity},${entry.location}`);
-            const csvContent = `data:text/csv;charset=utf-8,${csvHeader}\n${csvRows.join('\n')}`;
+            const csvContent = `${csvHeader}\n${csvRows.join('\n')}`;
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+
             const file = {
                 name: `${fileName}.csv`,
-                content: csvContent
+                content: url
             };
             saveFileToLocalStorage(file, 'cartonFiles');
             alert('File saved successfully.');
