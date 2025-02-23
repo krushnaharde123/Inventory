@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // MCB Entry Page Logic
+  // =========================== MCB ENTRY LOGIC ===========================
   const productFamilySelect = document.getElementById('product-family');
   const breakingCapacitySelect = document.getElementById('breaking-capacity');
   const identificationSpan = document.getElementById('identification');
@@ -95,8 +95,8 @@ document.addEventListener('DOMContentLoaded', () => {
     identificationSpan.textContent = "";
   }
 
-  // Carton Entry Page Logic
-  let uploadedMaterials = []; // Will hold objects { materialNumber, materialDescription }
+  // =========================== CARTON ENTRY LOGIC ===========================
+  let uploadedMaterials = []; // Array to hold materials from master file
   const masterFileInput = document.getElementById('carton-master-file');
   if (masterFileInput) {
     masterFileInput.addEventListener('change', handleMasterFileUpload);
@@ -108,14 +108,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const reader = new FileReader();
     reader.onload = (e) => {
       const data = new Uint8Array(e.target.result);
-      const workbook = XLSX.read(data, {type: 'array'});
+      const workbook = XLSX.read(data, { type: 'array' });
       const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-      // Parse Excel file assuming column A = material number, B = material description
-      const jsonData = XLSX.utils.sheet_to_json(worksheet, {header: 1});
+      // Parse Excel assuming column A = material number, B = material description
+      const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
       uploadedMaterials = [];
       jsonData.forEach((row, index) => {
-        if (index === 0) return; // skip header if exists
-        if(row[0] && row[1]){
+        if (index === 0) return; // Skip header row if present
+        if (row[0] && row[1]) {
           uploadedMaterials.push({
             materialNumber: row[0].toString(),
             materialDescription: row[1].toString()
@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Carton Entry addition logic with edit (simulate saving previous entries in backend)
+  // Carton Entry addition with edit functionality (latest entry shown; previous saved via localStorage simulation)
   let lastCartonEntry = null;
   const addCartonEntryButton = document.getElementById('add-carton-entry');
   if (addCartonEntryButton) {
@@ -163,16 +163,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const materialDesc = document.getElementById('material-description').value;
     const materialNum = document.getElementById('material-number').value;
     const location = document.getElementById('carton-location').value;
-    // Save previous entry (simulate backend storing – here using localStorage)
+    // Save previous entry (simulate saving backend using localStorage)
     if (lastCartonEntry) {
-      let previousEntries = JSON.parse(localStorage.getItem('cartonEntries') || "[]");
+      const previousEntries = JSON.parse(localStorage.getItem('cartonEntries') || "[]");
       previousEntries.push(lastCartonEntry);
       localStorage.setItem('cartonEntries', JSON.stringify(previousEntries));
     }
     lastCartonEntry = { materialDesc, materialNum, location };
 
     renderCartonEntryTable();
-    // Clear manual entries but leave the dropdown for convenience
+    // Clear only the manual entries (location); material description stays for ease of selection.
     document.getElementById('carton-location').value = "";
   }
 
@@ -188,7 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <td><button class="edit-btn">Edit</button></td>
       `;
       tbody.appendChild(row);
-      // Edit button logic – reload the last entry into the fields for editing.
+      // Edit button: reload last entry into the fields for editing.
       row.querySelector('.edit-btn').addEventListener('click', () => {
         document.getElementById('material-description').value = lastCartonEntry.materialDesc;
         document.getElementById('material-number').value = lastCartonEntry.materialNum;
@@ -199,11 +199,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Carton file preview and generation using XLSX
+  // =========================== CARTON FILE PREVIEW & GENERATION ===========================
   const previewCartonFileButton = document.getElementById('preview-carton-file');
   const generateCartonFileButton = document.getElementById('generate-carton-file');
   if (previewCartonFileButton) {
     previewCartonFileButton.addEventListener('click', () => {
+      // Show the Generate button when preview is clicked (assuming there is at least one entry)
+      if (document.querySelector('#carton-entry-table tbody').rows.length === 0) {
+        alert("No entries to preview.");
+        return;
+      }
       generateCartonFileButton.style.display = 'inline-block';
     });
   }
@@ -211,15 +216,27 @@ document.addEventListener('DOMContentLoaded', () => {
     generateCartonFileButton.addEventListener('click', generateCartonFile);
   }
   function generateCartonFile() {
+    // Ask user for a file name manually (without extension)
+    let fileName = prompt("Enter file name (without extension):", "CartonEntries");
+    if (!fileName) {
+      alert("File name is required.");
+      return;
+    }
+    fileName += ".xlsx";
     const table = document.getElementById('carton-entry-table');
+    if (table.tBodies[0].rows.length === 0) {
+      alert("No entries to generate file.");
+      return;
+    }
     const wb = XLSX.utils.book_new();
     const ws = XLSX.utils.table_to_sheet(table);
     XLSX.utils.book_append_sheet(wb, ws, 'CartonEntries');
-    XLSX.writeFile(wb, 'CartonEntries.xlsx');
-    addFileToPhysicalCounting('CartonEntries.xlsx', 'carton');
+    XLSX.writeFile(wb, fileName);
+    addFileToPhysicalCounting(fileName, 'carton');
   }
 
-  // Functions to add files to Physical Counting page sub-tabs
+  // =========================== PHYSICAL COUNTING FILES ===========================
+  // Adds generated file details to the Physical Counting page under the respective sub-tab.
   function addFileToPhysicalCounting(fileName, type) {
     const tableId = type === 'carton' ? 'carton-files-table' : 'mcb-files-table';
     const tbody = document.querySelector(`#${tableId} tbody`);
@@ -243,11 +260,11 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function downloadFile(fileName) {
-    // Placeholder for download functionality.
+    // Placeholder for file download logic; implement as needed.
     alert("Download functionality is not implemented in this demo.");
   }
 
-  // Tab Interface for Physical Counting page
+  // =========================== TAB INTERFACE FOR PHYSICAL COUNTING ===========================
   window.openTab = function (evt, tabName) {
     const tabContents = document.getElementsByClassName('tab-content');
     for (let content of tabContents) {
