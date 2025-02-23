@@ -3,14 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Carton Entry</title>
+  <title>Physical Counting</title>
   <link rel="stylesheet" href="styles.css" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
   <div class="header">
     <img src="siemens-logo.png" alt="Siemens Logo" class="logo" />
-    <h1>Carton Entry</h1>
+    <h1>Physical Counting</h1>
     <nav>
       <a href="index.html">Home</a>
       <a href="mcb-entry.html">MCB Entry</a>
@@ -27,46 +26,34 @@
       <li><a href="physical-counting.html">Physical Counting</a></li>
     </ul>
   </div>
-  <div class="content tab-interface">
-    <div class="container">
-      <h2>Carton Entry with Master File Upload</h2>
-      <div class="form-group">
-        <label for="carton-master-file">Upload Master Excel File</label>
-        <input type="file" id="carton-master-file" accept=".xlsx, .xls" />
-      </div>
-      <div class="form-group" id="master-upload-error"></div>
-      <div class="form-group">
-        <label for="material-description">Material Description <span class="required">*</span></label>
-        <input type="text" id="material-description" placeholder="Type to search..." list="material-list" />
-        <datalist id="material-list"></datalist>
-      </div>
-      <div class="form-group">
-        <label for="material-number">Material Number</label>
-        <input type="text" id="material-number" readonly />
-      </div>
-      <div class="form-group">
-        <label for="carton-location">Location <span class="required">*</span></label>
-        <input type="text" id="carton-location" required />
-      </div>
-      <button type="button" id="add-carton-entry">Add Entry</button>
-      <div class="entry-section">
-        <h3>Last Entry</h3>
-        <table id="carton-entry-table">
-          <thead>
-            <tr>
-              <th>Material Description</th>
-              <th>Material Number</th>
-              <th>Location</th>
-              <th>Edit</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
-      <div class="action-buttons">
-        <button type="button" id="preview-carton-file">Preview Carton File</button>
-        <button type="button" id="generate-carton-file" style="display: none;">Generate Carton File</button>
-      </div>
+  <div class="content">
+    <div class="tabs">
+      <button class="tab-button" onclick="openTab(event, 'mcb-tab')">MCB Entry Files</button>
+      <button class="tab-button" onclick="openTab(event, 'carton-tab')">Carton Entry Files</button>
+    </div>
+    <div id="mcb-tab" class="tab-content">
+      <h2>MCB Entry File Preview</h2>
+      <table id="mcb-files-table">
+        <thead>
+          <tr>
+            <th>File Name</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div id="carton-tab" class="tab-content" style="display:none;">
+      <h2>Carton Entry File Preview</h2>
+      <table id="carton-files-table">
+        <thead>
+          <tr>
+            <th>File Name</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
     </div>
   </div>
   <script src="script.js"></script>
