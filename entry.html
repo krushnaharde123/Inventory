@@ -11,9 +11,13 @@
     <div class="header">
         <img src="siemens-logo.png" alt="Siemens Logo" class="logo">
         <h1>MCB Entry</h1>
+        <div class="user-info">
+            <span id="current-time"></span>
+            <span id="user-login"></span>
+        </div>
         <nav>
             <a href="index.html">Home</a>
-            <a href="entry.html">MCB Entry</a>
+            <a href="mcb-entry.html">MCB Entry</a>
             <a href="carton-entry.html">Carton Entry</a>
             <a href="physical-counting.html">Physical Counting</a>
         </nav>
@@ -22,7 +26,7 @@
         <button class="sidebar-toggle">☰</button>
         <ul>
             <li><a href="index.html">Home</a></li>
-            <li><a href="entry.html">MCB Entry</a></li>
+            <li><a href="mcb-entry.html">MCB Entry</a></li>
             <li><a href="carton-entry.html">Carton Entry</a></li>
             <li><a href="physical-counting.html">Physical Counting</a></li>
         </ul>
@@ -31,8 +35,9 @@
         <div class="container">
             <form id="inventory-entry-form">
                 <div class="form-group">
-                    <label for="polarity">Polarity</label>
-                    <select id="polarity">
+                    <label for="polarity">Polarity <span class="required">*</span></label>
+                    <select id="polarity" required>
+                        <option value="">Select polarity</option>
                         <option value="1P">1P</option>
                         <option value="2P">2P</option>
                         <option value="3P">3P</option>
@@ -40,8 +45,9 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="rating">Rating</label>
-                    <select id="rating">
+                    <label for="rating">Rating <span class="required">*</span></label>
+                    <select id="rating" required>
+                        <option value="">Select rating</option>
                         <option value="0.5A">0.5A</option>
                         <option value="1A">1A</option>
                         <option value="2A">2A</option>
@@ -63,8 +69,11 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="product-family">Product Family</label>
-                    <select id="product-family">
+                    <label for="product-family">Product Family <span class="required">*</span>
+                        - Identification: <span id="identification" class="highlighted"></span>
+                    </label>
+                    <select id="product-family" required>
+                        <option value="">Select product family</option>
                         <option value="5SL1">5SL1</option>
                         <option value="5SJ">5SJ</option>
                         <option value="Mexico">Mexico</option>
@@ -80,21 +89,18 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="breaking-capacity">Breaking Capacity</label>
-                    <select id="breaking-capacity"></select>
+                    <label for="breaking-capacity">Breaking Capacity <span class="required">*</span></label>
+                    <select id="breaking-capacity" required></select>
                 </div>
                 <div class="form-group">
-                    <label for="identification">Identification</label>
-                    <input type="text" id="identification" readonly>
+                    <label for="quantity">Quantity <span class="required">*</span></label>
+                    <input type="number" id="quantity" min="1" required>
                 </div>
                 <div class="form-group">
-                    <label for="quantity">Quantity</label>
-                    <input type="number" id="quantity" min="1">
+                    <label for="location">Location <span class="required">*</span></label>
+                    <input type="text" id="location" required>
                 </div>
-                <div class="form-group">
-                    <label for="location">Location</label>
-                    <input type="text" id="location">
-                </div>
+                <div class="form-group error" id="mcb-error"></div>
                 <button type="button" id="add-entry">Add Entry</button>
             </form>
             <table id="entry-table">
@@ -111,12 +117,8 @@
                 <tbody></tbody>
             </table>
             <div class="action-buttons">
-                <button type="button" id="preview-inventory-file">Preview Inventory File</button>
-                <button type="button" id="generate-inventory-file" style="display: none;">Generate Inventory File</button>
-            </div>
-            <div class="form-group">
-                <label for="master-file">Upload Carton Master File</label>
-                <input type="file" id="master-file" accept=".xlsx, .xls">
+                <button type="button" id="preview-mcb-file">Preview MCB File</button>
+                <button type="button" id="generate-mcb-file" style="display: none;">Generate MCB File</button>
             </div>
         </div>
     </div>
