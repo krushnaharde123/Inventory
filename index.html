@@ -7,23 +7,28 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
+    <div class="header">
         <div class="logo">SIEMENS</div>
-        <h1>Inventory Management System</h1>
-        <div class="form-group">
-            <label for="current-time">Current Time (UTC)</label>
-            <span id="current-time"></span>
-        </div>
         <nav>
-            <a href="index.html">Home</a>
-            <a href="mcb-entry.html">MCB Entry</a>
-            <a href="carton-entry.html">Carton Entry</a>
-            <a href="physical-counting.html">Physical Counting</a>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="entry.html">MCB Entry</a></li>
+                <li><a href="carton-entry.html">Carton Entry</a></li>
+                <li><a href="physical-counting.html">Physical Counting</a></li>
+            </ul>
         </nav>
-        <div class="welcome-container">
-            <h2>Welcome to the Inventory Management System</h2>
-            <p>Select an option from the navigation menu to begin:</p>
-        </div>
+    </div>
+    <div class="sidebar">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="entry.html">MCB Entry</a></li>
+            <li><a href="carton-entry.html">Carton Entry</a></li>
+            <li><a href="physical-counting.html">Physical Counting</a></li>
+        </ul>
+    </div>
+    <div class="content">
+        <h1>Welcome to the Inventory Management System</h1>
+        <p>Select an option from the navigation menu to begin.</p>
     </div>
     <script src="script.js"></script>
 </body>
