@@ -1,61 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Physical Counting</title>
-  <link rel="stylesheet" href="styles.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physical Counting</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="header">
-    <img src="siemens-logo.png" alt="Siemens Logo" class="logo" />
-    <h1>Physical Counting</h1>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="mcb-entry.html">MCB Entry</a>
-      <a href="carton-entry.html">Carton Entry</a>
-      <a href="physical-counting.html">Physical Counting</a>
-    </nav>
-  </div>
-  <div class="sidebar">
-    <button class="sidebar-toggle">&#9776;</button>
-    <ul>
-      <li><a href="index.html">Home</a></li>
-      <li><a href="mcb-entry.html">MCB Entry</a></li>
-      <li><a href="carton-entry.html">Carton Entry</a></li>
-      <li><a href="physical-counting.html">Physical Counting</a></li>
-    </ul>
-  </div>
-  <div class="content">
-    <div class="tabs">
-      <button class="tab-button" onclick="openTab(event, 'mcb-tab')">MCB Entry Files</button>
-      <button class="tab-button" onclick="openTab(event, 'carton-tab')">Carton Entry Files</button>
+    <div class="header">
+        <img src="siemens-logo.png" alt="Siemens Logo" class="logo">
+        <h1>Physical Counting</h1>
+        <div class="user-info">
+            <span id="current-time"></span>
+            <span id="user-login">User: krushnaharde123</span>
+        </div>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="mcb-entry.html">MCB Entry</a>
+            <a href="carton-entry.html">Carton Entry</a>
+            <a href="physical-counting.html">Physical Counting</a>
+        </nav>
     </div>
-    <div id="mcb-tab" class="tab-content">
-      <h2>MCB Entry File Preview</h2>
-      <table id="mcb-files-table">
-        <thead>
-          <tr>
-            <th>File Name</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
+    <div class="sidebar">
+        <button class="sidebar-toggle">☰</button>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="mcb-entry.html">MCB Entry</a></li>
+            <li><a href="carton-entry.html">Carton Entry</a></li>
+            <li><a href="physical-counting.html">Physical Counting</a></li>
+        </ul>
     </div>
-    <div id="carton-tab" class="tab-content" style="display:none;">
-      <h2>Carton Entry File Preview</h2>
-      <table id="carton-files-table">
-        <thead>
-          <tr>
-            <th>File Name</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
+    <div class="content">
+        <div class="tabs">
+            <button class="tab-button active" onclick="openTab(event, 'mcb-tab')">MCB Entry Files</button>
+            <button class="tab-button" onclick="openTab(event, 'carton-tab')">Carton Entry Files</button>
+        </div>
+        <div id="mcb-tab" class="tab-content" style="display: block;">
+            <h2>MCB Entry Files</h2>
+            <div class="files-container">
+                <table id="mcb-files-table">
+                    <thead>
+                        <tr>
+                            <th>File Name</th>
+                            <th>Created Date</th>
+                            <th>Created By</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+        <div id="carton-tab" class="tab-content">
+            <h2>Carton Entry Files</h2>
+            <div class="files-container">
+                <table id="carton-files-table">
+                    <thead>
+                        <tr>
+                            <th>File Name</th>
+                            <th>Created Date</th>
+                            <th>Created By</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
     </div>
-  </div>
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
