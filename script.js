@@ -92,6 +92,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const capacities = breakingCapacities[family] || [];
         populateBreakingCapacity(capacities);
         identificationSpan.textContent = family;
+        identificationSpan.classList.add('highlighted');
     });
 
     function populateBreakingCapacity(capacities) {
