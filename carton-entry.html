@@ -8,8 +8,26 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
-    <div class="container">
+    <div class="header">
         <div class="logo">SIEMENS</div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="entry.html">MCB Entry</a></li>
+                <li><a href="carton-entry.html">Carton Entry</a></li>
+                <li><a href="physical-counting.html">Physical Counting</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div class="sidebar">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="entry.html">MCB Entry</a></li>
+            <li><a href="carton-entry.html">Carton Entry</a></li>
+            <li><a href="physical-counting.html">Physical Counting</a></li>
+        </ul>
+    </div>
+    <div class="content">
         <h1>Carton Entry</h1>
         <form id="carton-entry-form">
             <div class="form-group">
@@ -49,7 +67,7 @@
         </table>
         <div class="action-buttons">
             <button type="button" id="preview-carton-file">Preview Carton File</button>
-            <button type="button" id="generate-carton-file" style="display: none;">Generate Carton File</button>
+            <button type="button" id="save-carton-file" style="display: none;">Save Carton File</button>
         </div>
     </div>
     <script src="script.js"></script>
