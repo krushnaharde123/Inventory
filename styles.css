@@ -18,13 +18,11 @@ body {
 
 .header .logo {
     height: 40px;
-    vertical-align: middle;
 }
 
 .header h1 {
     margin: 0;
     display: inline-block;
-    vertical-align: middle;
     margin-left: 20px;
 }
 
@@ -63,7 +61,7 @@ body {
     position: fixed;
     top: 0;
     left: 0;
-    overflow-x: hidden; /* Hide horizontal scrollbar */
+    overflow-x: hidden;
     transition: width 0.3s ease;
     padding-top: 60px;
     z-index: 900;
