@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIEMENS</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            width: 600px;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            position: relative;
+        }
+        .logo {
+            position: absolute;
+            top: 10px;
+            left: 10px; /* Shifted to left corner */
+            font-size: 36px; /* Larger font size for Siemens */
+            font-weight: bold;
+            color: #009999;
+        }
+        .title {
+            text-align: center;
+            color: #009999;
+            font-size: 24px; /* Smaller font size for Trolley Material Entry */
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: bold;
+        }
+        .form-group input, .form-group select, .form-group button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .form-group button {
+            width: auto;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        .form-group button:hover {
+            background-color: #0056b3;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        .action-buttons {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .action-buttons button {
+            margin-right: 10px;
+            padding: 10px 15px;
+            border-radius: 5px;
+            border: none;
+            color: #fff;
+            font-size: 0.8em; /* Reduce size by 80% */
+        }
+        .action-buttons #generate-trolley-file {
+            background-color: #28a745;
+        }
+        .action-buttons #generate-trolley-file:hover {
+            background-color: #218838;
+        }
+        .action-buttons #preview-trolley-file {
+            background-color: #17a2b8;
+        }
+        .action-buttons #preview-trolley-file:hover {
+            background-color: #138496;
+        }
+        #upload-file {
+            margin-top: 10px;
+        }
+        #files-table {
+            margin-top: 20px;
+            width: 100%;
+        }
+        #files-table th, #files-table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+        #files-table button {
+            font-size: 0.8em; /* Reduce size by 80% */
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: none;
+            color: #fff;
+        }
+        #files-table .download-file {
+            background-color: #007BFF;
+        }
+        #files-table .delete-file {
+            background-color: #DC3545;
+        }
+        #files-table .edit-entry {
+            background-color: #FFC107; /* Highlight color for edit button */
+        }
+        .quantity-hint {
+            display: none;
+            color: darkgray;
+        }
+        .highlight {
+            color: darkred; /* Colorful hint */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">SIEMENS</div>
+        <h1 class="title">Trolley Material Entry</h1>
+        <form id="material-entry-form">
+            <div class="form-group">
+                <label for="upload-file">Upload Material Master File</label>
+                <input type="file" id="upload-file" accept=".xlsx, .xls">
+            </div>
+            <div class="form-group">
+                <label for="trolley-name">Trolley Name</label>
+                <input type="text" id="trolley-name" readonly>
+            </div>
+            <div class="form-group">
+                <label for="material-description">Material Description</label>
+                <input list="material-options" id="material-description" placeholder="Type or select a description..." inputmode="numeric">
+                <datalist id="material-options"></datalist>
+            </div>
+            <div class="form-group">
+                <label for="material-number">Material Number</label>
+                <input type="text" id="material-number" readonly>
+            </div>
+            <div class="form-group">
+                <label for="quantity">Quantity</label>
+                <small id="quantity-hint" class="quantity-hint highlight">Enter box quantity only</small>
+                <input type="number" id="quantity" min="1">
+            </div>
+            <button type="button" id="add-entry">Add Entry</button>
+        </form>
+        <table id="entry-table">
+            <thead>
+                <tr>
+                    <th>Material Description</th>
+                    <th>Material Number</th>
+                    <th>Quantity</th>
+                    <th>Edit</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <div class="action-buttons">
+            <button type="button" id="preview-trolley-file">Preview Trolley File</button>
+            <button type="button" id="generate-trolley-file" style="display: none;">Generate Trolley File</button>
+        </div>
+        <table id="files-table">
+            <thead>
+                <tr>
+                    <th>File Name</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <script>
+        const materialDescriptionInput = document.getElementById('material-description');
+        const materialNumberInput = document.getElementById('material-number');
+        const quantityInput = document.getElementById('quantity');
+        const quantityHint = document.getElementById('quantity-hint');
+        const trolleyNameInput = document.getElementById('trolley-name');
+        const entryTableBody = document.getElementById('entry-table').querySelector('tbody');
+        const materialOptions = document.getElementById('material-options');
+        const filesTableBody = document.getElementById('files-table').querySelector('tbody');
+        const previewTrolleyFileButton = document.getElementById('preview-trolley-file');
+        const generateTrolleyFileButton = document.getElementById('generate-trolley-file');
+        const allEntries = [];
+        let materialMasterData = [];
+        let trolleyCount = 0;
+
+        document.getElementById('upload-file').addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const firstSheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[firstSheetName];
+                    const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
+                    materialMasterData = jsonData.slice(1).map(row => ({
+                        description: row[0],
+                        number: row[1]
+                    }));
+
+                    updateMaterialOptions();
+                    saveMaterialMasterData();
+                };
+                reader.readAsArrayBuffer(file);
+            }
+        });
+
+        function saveMaterialMasterData() {
+            localStorage.setItem('materialMasterData', JSON.stringify(materialMasterData));
+        }
+
+        function loadMaterialMasterData() {
+            const storedData = localStorage.getItem('materialMasterData');
+            if (storedData) {
+                materialMasterData = JSON.parse(storedData);
+                updateMaterialOptions();
+            }
+        }
+
+        function updateMaterialOptions() {
+            materialOptions.innerHTML = '';
+            materialMasterData.forEach(item => {
+                const option = document.createElement('option');
+                option.value = item.description;
+                materialOptions.appendChild(option);
+            });
+        }
+
+        materialDescriptionInput.addEventListener('input', () => {
+            const selectedDescription = materialDescriptionInput.value;
+            const material = materialMasterData.find(item => item.description === selectedDescription);
+            materialNumberInput.value = material ? material.number : '';
+            
+            if (selectedDescription.match(/Z12|Z48|Z24|Z16/i)) {
+                quantityHint.style.display = 'block';
+            } else {
+                quantityHint.style.display = 'none';
+            }
+        });
+
+        function generateTrolleyName() {
+            const today = new Date();
+            const datePart = today.toISOString().split('T')[0].replace(/-/g, '');
+            trolleyCount++;
+            return `${datePart}-${trolleyCount}`;
+        }
+
+        trolleyNameInput.value = generateTrolleyName();
+
+        document.getElementById('add-entry').addEventListener('click', () => {
+            const description = materialDescriptionInput.value;
+            const number = materialNumberInput.value;
+            const quantity = quantityInput.value;
+
+            if (!description || !number || !quantity) {
+                alert('Please fill all fields before adding entry.');
+                return;
+            }
+
+            const entry = { description, number, quantity };
+            allEntries.push(entry);
+
+            entryTableBody.innerHTML = '';
+            // Display only the last entry
+            const lastEntry = allEntries[allEntries.length - 1];
+            const row = document.createElement('tr');
+            row.innerHTML = `<td>${lastEntry.description}</td><td>${lastEntry.number}</td><td>${lastEntry.quantity}</td><td><button class="edit-entry" style="background-color: #FFC107;">Edit</button></td>`;
+            entryTableBody.appendChild(row);
+
+            materialDescriptionInput.value = '';
+            materialNumberInput.value = '';
+            quantityInput.value = '';
+        });
+
+        entryTableBody.addEventListener('click', (event) => {
+            if (event.target.classList.contains('edit-entry')) {
+                const row = event.target.closest('tr');
+                const description = row.cells[0].innerText;
+                const number = row.cells[1].innerText;
+                const quantity = row.cells[2].innerText;
+                
+                materialDescriptionInput.value = description;
+                materialNumberInput.value = number;
+                quantityInput.value = quantity;
+                
+                allEntries.pop();
+                row.remove();
+            }
+        });
+
+        previewTrolleyFileButton.addEventListener('click', () => {
+            if (allEntries.length === 0) {
+                alert('No entries to preview.');
+                return;
+            }
+            entryTableBody.innerHTML = '';
+            allEntries.forEach((entry, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td>${entry.description}</td><td>${entry.number}</td><td>${entry.quantity}</td><td><button class="edit-entry" style="background-color: #FFC107;">Edit</button></td>`;
+                entryTableBody.appendChild(row);
+            });
+            generateTrolleyFileButton.style.display = 'inline-block';
+        });
+
+        generateTrolleyFileButton.addEventListener('click', () => {
+            const csvHeader = "Material Description,Material Number,Quantity";
+            const csvRows = allEntries.map(entry => `${entry.description},${entry.number},${entry.quantity}`);
+            const csvContent = `data:text/csv;charset=utf-8,${csvHeader}\n${csvRows.join('\n')}`;
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement('a');
+            link.setAttribute('href', encodedUri);
+            link.setAttribute('download', `${trolleyNameInput.value}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            const storedFiles = JSON.parse(localStorage.getItem('generatedFiles')) || [];
+            storedFiles.push({ name: `${trolleyNameInput.value}.csv`, content: csvContent });
+            localStorage.setItem('generatedFiles', JSON.stringify(storedFiles));
+            renderFiles();
+        });
+
+        function renderFiles() {
+            filesTableBody.innerHTML = '';
+            const storedFiles = JSON.parse(localStorage.getItem('generatedFiles')) || [];
+            storedFiles.forEach((file, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td>${file.name}</td><td><button class="download-file" data-index="${index}">Download</button> <button class="delete-file" data-index="${index}">Delete</button></td>`;
+                filesTableBody.appendChild(row);
+            });
+        }
+
+        filesTableBody.addEventListener('click', (event) => {
+            const index = event.target.getAttribute('data-index');
+            let storedFiles = JSON.parse(localStorage.getItem('generatedFiles')) || [];
+            if (event.target.classList.contains('download-file')) {
+                const file = storedFiles[index];
+                const link = document.createElement('a');
+                link.setAttribute('href', file.content);
+                link.setAttribute('download', file.name);
+                document.body.appendChild(link);
+                link.click();
+            } else if (event.target.classList.contains('delete-file')) {
+                storedFiles.splice(index, 1);
+                localStorage.setItem('generatedFiles', JSON.stringify(storedFiles));
+                renderFiles();
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadMaterialMasterData();
+            renderFiles();
+        });
+    </script>
+</body>
+</html>
