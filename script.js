@@ -8,7 +8,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Function to get the current user
     function getCurrentUser() {
-        // Replace this with your actual user authentication logic
         return 'krushnaharde123';
     }
 
@@ -52,7 +51,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Function to handle file download
     window.downloadFile = function(fileName) {
-        // In a real application, this would trigger a server request
         alert(`Downloading file: ${fileName}`);
     }
 
@@ -63,12 +61,10 @@ document.addEventListener('DOMContentLoaded', function() {
             const table = row.closest('table');
             const fileType = table.id === 'mcb-files-table' ? 'mcbFiles' : 'cartonFiles';
 
-            // Remove from localStorage
             let files = JSON.parse(localStorage.getItem(fileType) || '[]');
             files = files.filter(file => file.name !== fileName);
             localStorage.setItem(fileType, JSON.stringify(files));
 
-            // Remove from UI
             row.remove();
         }
     }
@@ -79,16 +75,14 @@ document.addEventListener('DOMContentLoaded', function() {
         const fileData = {
             name: fileName,
             date: now.toISOString().replace('T', ' ').substr(0, 19),
-            createdBy: getCurrentUser() // Use the current user
+            createdBy: getCurrentUser()
         };
 
-        // Save to localStorage
         const storageKey = fileType === 'mcb' ? 'mcbFiles' : 'cartonFiles';
         let files = JSON.parse(localStorage.getItem(storageKey) || '[]');
         files.push(fileData);
         localStorage.setItem(storageKey, JSON.stringify(files));
 
-        // Update UI if on physical counting page
         const tableId = fileType === 'mcb' ? 'mcb-files-table' : 'carton-files-table';
         const tableBody = document.querySelector(`#${tableId} tbody`);
         if (tableBody) {
@@ -105,7 +99,7 @@ document.addEventListener('DOMContentLoaded', function() {
             tableBody.appendChild(row);
         }
     }
-    
+
     // Sidebar functionality
     const sidebar = document.querySelector('.sidebar');
     const sidebarToggle = document.querySelector('.sidebar-toggle');
