@@ -178,6 +178,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // MCB Entry page logic
     const productFamilySelect = document.getElementById('product-family');
     const breakingCapacitySelect = document.getElementById('breaking-capacity');
+    const identificationSpan = document.getElementById('identification');
 
     const breakingCapacities = {
         '5SL1': ['3KA'],
@@ -198,6 +199,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const family = event.target.value;
         const capacities = breakingCapacities[family] || [];
         populateBreakingCapacity(capacities);
+        identificationSpan.textContent = family;
     });
 
     function populateBreakingCapacity(capacities) {
