@@ -40,7 +40,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 const workbook = XLSX.read(data, { type: 'array' });
                 const firstSheetName = workbook.SheetNames[0];
                 const worksheet = workbook.Sheets[firstSheetName];
-                masterData = XLSX.utils.sheet_to_json(worksheet);
+                masterData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+                
                 populateMaterialList(masterData);
             };
             reader.readAsArrayBuffer(file);
@@ -50,18 +51,19 @@ document.addEventListener('DOMContentLoaded', function() {
     function populateMaterialList(data) {
         const materialList = document.getElementById('material-list');
         materialList.innerHTML = '';
-        data.forEach(item => {
+        data.forEach((item, index) => {
+            if (index === 0) return; // Skip header row
             const option = document.createElement('option');
-            option.value = item['Description'];
+            option.value = item[0]; // Description
             materialList.appendChild(option);
         });
     }
 
     materialDescriptionInput.addEventListener('input', (event) => {
         const description = event.target.value;
-        const material = masterData.find(item => item['Description'] === description);
+        const material = masterData.find(item => item[0] === description);
         if (material) {
-            materialNumberInput.value = material['Material Number'];
+            materialNumberInput.value = material[1]; // Material Number
         } else {
             materialNumberInput.value = '';
         }
