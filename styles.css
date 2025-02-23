@@ -186,4 +186,57 @@ td {
 }
 
 .download-file {
-  background-color: #007BFF
+  background-color: #007BFF;
+  padding: 5px 10px;
+  border: none;
+  color: #fff;
+  margin-right: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.delete-file {
+  background-color: #DC3545;
+  padding: 5px 10px;
+  border: none;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.highlighted {
+  font-weight: bold;
+  background-color: yellow;
+  padding: 2px 5px;
+}
+
+.tabs {
+  overflow: hidden;
+  background-color: #f1f1f1;
+  border-bottom: 1px solid #ccc;
+}
+
+.tabs button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+}
+
+.tabs button:hover {
+  background-color: #ddd;
+}
+
+.tabs button.active {
+  background-color: #ccc;
+}
+
+.tab-content {
+  display: none;
+  padding: 6px 12px;
+  border-top: none;
+}
