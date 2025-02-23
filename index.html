@@ -1,39 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Inventory Management Home</title>
-  <link rel="stylesheet" href="styles.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Management</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="header">
-    <img src="siemens-logo.png" alt="Siemens Logo" class="logo" />
-    <h1>Inventory Management System</h1>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="mcb-entry.html">MCB Entry</a>
-      <a href="carton-entry.html">Carton Entry</a>
-      <a href="physical-counting.html">Physical Counting</a>
-    </nav>
-  </div>
-  <div class="sidebar">
-    <button class="sidebar-toggle">
-      &#9776; <!-- Three-line hamburger icon -->
-    </button>
-    <ul>
-      <li><a href="index.html">Home</a></li>
-      <li><a href="mcb-entry.html">MCB Entry</a></li>
-      <li><a href="carton-entry.html">Carton Entry</a></li>
-      <li><a href="physical-counting.html">Physical Counting</a></li>
-    </ul>
-  </div>
-  <div class="content">
-    <h2>Welcome!</h2>
-    <p>
-      Use the navigation links to manage your inventory entries and view physical counting reports.
-    </p>
-  </div>
-  <script src="script.js"></script>
+    <div class="header">
+        <img src="siemens-logo.png" alt="Siemens Logo" class="logo">
+        <h1>Inventory Management System</h1>
+        <div class="user-info">
+            <span id="current-time"></span>
+            <span id="user-login">User: krushnaharde123</span>
+        </div>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="mcb-entry.html">MCB Entry</a>
+            <a href="carton-entry.html">Carton Entry</a>
+            <a href="physical-counting.html">Physical Counting</a>
+        </nav>
+    </div>
+    <div class="sidebar">
+        <button class="sidebar-toggle">☰</button>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="mcb-entry.html">MCB Entry</a></li>
+            <li><a href="carton-entry.html">Carton Entry</a></li>
+            <li><a href="physical-counting.html">Physical Counting</a></li>
+        </ul>
+    </div>
+    <div class="content">
+        <div class="welcome-container">
+            <h2>Welcome to the Inventory Management System</h2>
+            <p>Select an option from the navigation menu to begin:</p>
+            <div class="menu-cards">
+                <div class="card">
+                    <h3>MCB Entry</h3>
+                    <p>Enter and manage MCB inventory data</p>
+                    <a href="mcb-entry.html" class="button">Go to MCB Entry</a>
+                </div>
+                <div class="card">
+                    <h3>Carton Entry</h3>
+                    <p>Manage carton inventory with master file upload</p>
+                    <a href="carton-entry.html" class="button">Go to Carton Entry</a>
+                </div>
+                <div class="card">
+                    <h3>Physical Counting</h3>
+                    <p>View and manage inventory files</p>
+                    <a href="physical-counting.html" class="button">Go to Physical Counting</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>
